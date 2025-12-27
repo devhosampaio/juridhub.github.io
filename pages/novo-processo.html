@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Novo Processo</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Adicionar Novo Processo</h1>
+        <form>
+            <div class="mb-3">
+                <label for="nome-cliente" class="form-label">Nome do Cliente:</label>
+                <input type="text" class="form-control" id="nome-cliente" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="numero-telefone" class="form-label">Número de Telefone:</label>
+                <input type="text" class="form-control" id="numero-telefone" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="numero-processo" class="form-label">Número do Processo:</label>
+                <input type="text" class="form-control" id="numero-processo" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="tribunal" class="form-label">Tribunal</label>
+                <select class="form-select" id="tribunal" required>
+                    <option value="">Selecione um tribunal</option>
+                    <option value="trf1">TRF1</option>
+                    <option value="trt22">TRT22</option>
+                    <option value="tjpi">TJPI</option>
+                    <option value="">Adicionar Tribunal</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="vara" class="form-label">Vara</label>
+                <select class="form-select" id="vara" required>
+                    <option value="">Selecione uma vara</option>
+                    <option value="1a Vara">1ª Vara</option>
+                    <option value="2a Vara">2ª Vara</option>
+                    <option value="3a Vara">3ª Vara</option>
+                    <option value="">Adicionar Vara</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Adicionar Processo</button>
+
+                    <a href="../index.html" class="btn btn-outline-secondary">Voltar ao Início</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAIhkynDnXI0M8SiJsxkL3pnTkqmpQ60YQ",
+        authDomain: "juridhub.firebaseapp.com",
+        projectId: "juridhub",
+        storageBucket: "juridhub.firebasestorage.app",
+        messagingSenderId: "337579475060",
+        appId: "1:337579475060:web:9f02e8e73bfdd606d91121",
+        measurementId: "G-LDHSGTC36N"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        try {
+            const novoProcesso = {
+                cliente: document.getElementById('nome-cliente').value,
+                telefone: document.getElementById('numero-telefone').value,
+                numeroProcesso: document.getElementById('numero-processo').value,
+                tribunal: document.getElementById('tribunal').value,
+                vara: document.getElementById('vara').value,
+                dataCadastro: new Date()
+            };
+
+            const docRef = await addDoc(collection(db, "processos"), novoProcesso);
+            
+            alert("Processo adicionado com sucesso!");
+            form.reset();
+            window.location.href = "../index.html";
+
+        } catch (error) {
+            console.error("Erro ao salvar:", error);
+            alert("Erro ao salvar dados. Verifique o console.");
+        }
+    });
+</script>
+</body>
+</html>
